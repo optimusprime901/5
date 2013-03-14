@@ -1,0 +1,10 @@
+str.charAt(2);
+
+str.substring(start,end); does not include end
+
+str.toUpperCase();
+
+"the big bang".indexOf("big")//4
+
+
+

@@ -28,18 +28,12 @@ function init(){
 
 	imageData = ctx.createImageData(canvas.width,canvas.height);
 
-	//glowImg = new Image();
-	//glowImg.src = "http://www.picturetopeople.org/images/best_online_photo_effects/before_photo_effect.jpg";
-	//glowImg.onload(ctx.drawImage(glowImg,0,0,100,100));
+	glowImg = new Image();
+	glowImg.src = "download.png";
 
 	canvas.addEventListener('mousedown',mouseDown,false);
 	canvas.addEventListener('mousemove',mouseMove,false);
 	canvas.addEventListener('mouseup',mouseUp,false);
-
-	canvas.addEventListener('touchstart',touchStart,false);
-	canvas.addEventListener('touchmove',touchMove,false);
-	canvas.addEventListener('touchend',touchEnd,false);
-	
 	
 	colorElement = document.getElementById('color');
 	colorElement.addEventListener('change',colorChange,false);
@@ -92,16 +86,10 @@ function init(){
     invertElement = document.getElementById('invertElement');
     invertElement.addEventListener('click',invert,false);
 
-    greyscaleElement = document.getElementById('greyscaleElement');
-    greyscaleElement.addEventListener('click',greyscale,false);
-
-    sketchElement = document.getElementById('sketchElement');
-    sketchElement.addEventListener('click',sketch,false);
-
 	freeHandObj = new freeHand();
 	freeHandObj2 = new freeHand();
 	strokeRectangleObj = new strokeRectangle();
-	strokeRectangleObj2 = new strokeRectangle();
+	strokeRectangleObj2 = new strokeRectangleSymmetry();
 	fillRectangleObj = new fillRectangle();
 	fillRectangleObj2 = new fillRectangleSymmetry();
 	lineObj = new line();
@@ -116,9 +104,7 @@ function init(){
 	glowingPencilObj2 = new glowingPencil();
 	eraserObj = new eraser();
 	eraserObj2 = new eraser();
-	sprayObj = new spray();
-	sprayObj2 = new spray();
-
+	
 	ctx.fillStyle = "white";
 	ctx.fillRect(0,0,canvas.width,canvas.height);
 	ctx.fillStyle ="black";
@@ -142,7 +128,7 @@ function mouseUp(e){
 		if(this.drawX>canvas.width/2){
 			this.x2=(canvas.width/2)-(this.drawX-canvas.width/2);
 			
-			toolList2(e,"up",this.x2,this.drawY);
+			toolList2(e,"up",this.drawX,this.drawY,this.x2,this.drawY);
 		}
 
 		else{
@@ -167,7 +153,7 @@ function mouseDown(e){
 		if(this.drawX>canvas.width/2){
 			this.x2=(canvas.width/2)-(this.drawX-canvas.width/2);
 			
-			toolList2(e,"down",this.x2,this.drawY);
+			toolList2(e,"down",this.drawX,this.drawY,this.x2,this.drawY);
 		}
 
 		else{
@@ -203,101 +189,6 @@ function mouseMove(e){
 	}
 
 }
-
-
-
-
-
-
-
-
-function touchEnd(e){
-
-	e.preventDefault();
-
-	this.drawX = e.touches[0].pageX-canvas.offsetLeft;
-	this.drawY = e.touches[0].pageY-canvas.offsetTop;
-
-	saveImage();
-
-	toolList(e,"up",this.drawX,this.drawY);
-//toolList(e,"move",mouseMove.drawX,mouseMove.drawY);
-
-	if(symmetry){
-
-		if(this.drawX>canvas.width/2){
-			this.x2=(canvas.width/2)-(this.drawX-canvas.width/2);
-			
-			toolList2(e,"up",this.x2,this.drawY);
-		}
-
-		else{
-			this.x2 =(canvas.width/2)+(canvas.width/2-this.drawX);
-			toolList2(e,"up",this.x2,this.drawY);
-		}
-	}
-	
-}
-
-function touchStart(e){
-	
-	e.preventDefault();
-
-	//saveImage();
-
-	this.drawX = e.touches[0].pageX-canvas.offsetLeft;
-	this.drawY = e.touches[0].pageY-canvas.offsetTop;
-
-	toolList(e,"down",this.drawX,this.drawY);
-
-	if(symmetry){
-
-		if(this.drawX>canvas.width/2){
-			this.x2=(canvas.width/2)-(this.drawX-canvas.width/2);
-			
-			toolList2(e,"down",this.x2,this.drawY);
-		}
-
-		else{
-			this.x2 =(canvas.width/2)+(canvas.width/2-this.drawX);
-			toolList2(e,"down",this.x2,this.drawY);
-		}
-	}
-
-}
-
-function touchMove(e){
-
-	e.preventDefault();
-	
-	this.drawX = e.touches[0].pageX-canvas.offsetLeft;
-	this.drawY = e.touches[0].pageY-canvas.offsetTop;
-
-	toolList(e,"move",this.drawX,this.drawY);
-	
-	if(symmetry){
-
-		if(this.drawX>canvas.width/2){
-			this.x2=(canvas.width/2)-(this.drawX-canvas.width/2);
-			//toolList(e,"move",this.drawX,this.drawY);
-			toolList2(e,"move",this.x2,this.drawY,this.drawX,this.drawY);
-			//toolList(e,"move",this.drawX,this.drawY);
-			document.getElementById("mess").innerHTML=this.drawX + " " + this.x2;
-		}
-
-		else{
-			this.x2 =(canvas.width/2)+(canvas.width/2-this.drawX);
-			toolList2(e,"move",this.x2,this.drawY,this.drawX,this.drawY);
-		}
-		//toolList(e,"move",this.drawX,this.drawY);
-	}
-
-}
-
-
-
-
-
 
 
 function toolList(e,mouseEvent,x,y){
@@ -342,10 +233,6 @@ function toolList(e,mouseEvent,x,y){
 		case "eraser":
 		eraserObj.mouseUp(e,x,y);
 		break;
-
-		case "spray":
-		sprayObj.mouseUp(e,x,y);
-		break;
 	}
 }
 
@@ -389,10 +276,6 @@ function toolList(e,mouseEvent,x,y){
 
 		case "eraser":
 		eraserObj.mouseDown(e,x,y);
-		break;
-
-		case "spray":
-		sprayObj.mouseDown(e,x,y);
 		break;
 	}
 }
@@ -439,10 +322,6 @@ function toolList(e,mouseEvent,x,y){
 		case "eraser":
 		eraserObj.mouseMove(e,x,y);
 		break;
-
-		case "spray":
-		sprayObj.mouseMove(e,x,y);
-		break;
 	}
 	}
 
@@ -470,12 +349,11 @@ function toolList2(e,mouseEvent,xx,yy,xx2,yy2){
 		break;
 
 		case "strokeRectangle":
-		strokeRectangleObj2.mouseUp(e,xx,yy);
+		strokeRectangleObj2.mouseUp(e,xx,yy,xx2,yy2);
 		break;
 
 		case "fillRectangle":
 		fillRectangleObj2.mouseUp(e,xx,yy,xx2,yy2);
-		ctx.drawImage(glowImg,0,0,100,100);
 		break;
 
 		case "line":
@@ -501,10 +379,6 @@ function toolList2(e,mouseEvent,xx,yy,xx2,yy2){
 		case "eraser":
 		eraserObj2.mouseUp(e,xx,yy);
 		break;
-
-		case "spray":
-		sprayObj2.mouseUp(e,xx,yy);
-		break;
 	}
 }
 
@@ -519,7 +393,7 @@ function toolList2(e,mouseEvent,xx,yy,xx2,yy2){
 		break;
 
 		case "strokeRectangle":
-		strokeRectangleObj2.mouseDown(e,xx,yy);
+		strokeRectangleObj2.mouseDown(e,xx,yy,xx2,yy2);
 		break;
 
 		case "fillRectangle":
@@ -549,10 +423,6 @@ function toolList2(e,mouseEvent,xx,yy,xx2,yy2){
 		case "eraser":
 		eraserObj2.mouseDown(e,xx,yy);
 		break;
-
-		case "spray":
-		sprayObj2.mouseDown(e,xx,yy);
-		break;
 	}
 }
 
@@ -567,7 +437,7 @@ function toolList2(e,mouseEvent,xx,yy,xx2,yy2){
 		break;
 
 		case "strokeRectangle":
-		strokeRectangleObj2.mouseMove(e,xx,yy);
+		strokeRectangleObj2.mouseMove(e,xx,yy,xx2,yy2);
 		break;
 
 		case "fillRectangle":
@@ -596,10 +466,6 @@ function toolList2(e,mouseEvent,xx,yy,xx2,yy2){
 
 		case "eraser":
 		eraserObj2.mouseMove(e,xx,yy);
-		break;
-
-		case "spray":
-		sprayObj2.mouseMove(e,xx,yy);
 		break;
 	}
 	}
@@ -715,16 +581,13 @@ function glowSizeChange(e){
 
 function invert(){
 
-//saveImage();
+saveImage();
 	var img = ctx.getImageData(0,0,canvas.width,canvas.height);
 	var imgData = img.data;
 	for(var i=0;i<imgData.length;i+=4){
-		//imgData[i]=imgData[i+1]=imgData[i+2]=(imgData[i] + imgData[i+1] + imgData[i+2])/3;
-
 		imgData[i]=255-imgData[i];
 		imgData[i+1]=255-imgData[i+1];
 		imgData[i+2]=255-imgData[i+2];
-		
 		//imgData[i+3]=255-imgData[i+3];
 	}
 
@@ -733,37 +596,9 @@ function invert(){
 }
 
 
-function greyscale(){
-
-//saveImage();
-	var img = ctx.getImageData(0,0,canvas.width,canvas.height);
-	var imgData = img.data;
-	for(var i=0;i<imgData.length;i+=4){
-
-	imgData[i]=imgData[i+1]=imgData[i+2]=(imgData[i] + imgData[i+1] + imgData[i+2])/3;
-}
-
-	ctx.putImageData(img,0,0);
-	saveImage();
-}
 
 
 
-function sketch(){
-
-//saveImage();
-greyscale();
-	var img = ctx.getImageData(0,0,canvas.width,canvas.height);
-	var imgData = img.data;
-	for(var i=0;i<imgData.length;i+=4){
-if(imgData[i]!=imgData[i+1]!=imgData[i+2]!=0){
-	imgData[i]=imgData[i+1]=imgData[i+2]=255;
-}
-}
-
-	ctx.putImageData(img,0,0);
-	saveImage();
-}
 
 
 
@@ -1036,6 +871,80 @@ function strokeRectangle(){
 
 
 
+function strokeRectangleSymmetry(){
+
+
+	 this.mouseDownBoolean = false;
+	 this.drawX = this.drawY2 = this.drawY = this.drawX2 = 0;
+	 this.drew = false;
+	 this.w = this.h =0;
+
+
+	this.mouseUp = function(e,x,y,x2,y2){
+		//if(drew){
+		mouseDownBoolean = false;
+		
+		//ctx.strokeRect(this.drawX,this.drawY,this.w,this.h);
+		
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		ctx.putImageData(imageData,0,0);
+		ctx.strokeRect(this.drawX,this.drawY,this.w,this.h);
+		
+		//drew = false;
+	//}
+	}
+
+
+	this.mouseDown = function(e,x,y,x2,y2){
+		this.drawX = x;
+		this.drawY = y;
+		w= 10;
+		h=10;
+		mouseDownBoolean = true;
+
+		imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+
+		//drew = true;
+	}
+
+	this.mouseMove = function(e,x,y,x2,y2){
+		if(mouseDownBoolean){
+			if(this.drawX2!=x || this.drawY2!=y){
+
+		
+		this.drawX2 = x;
+		this.drawY2 = y;
+		this.w = this.drawX2 - this.drawX/*this.drawX2>this.drawX ? this.drawX2 - this.drawX:this.drawX - this.drawX2*/;
+		this.h = this.drawY2 - this.drawY/*this.drawY2>this.drawY? this.drawY2 - this.drawY: this.drawY - this.drawY2*/;
+		/*this.w = (this.w<0)? -this.w:this.w;
+		this.h = (this.h<0)? -this.h:this.h;*/
+		//ctx.clearRect(0,0,800,600);
+		//ctx.fillText(this.drawX + " " + this.w,100,100);
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		ctx.putImageData(imageData,0,0);
+		ctx.strokeRect(this.drawX,this.drawY,this.w,this.h);
+		}
+
+		}
+	}
+
+}//end of StrokeRectangle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1073,7 +982,7 @@ function fillRectangle(){
 		//drew = true;
 	}
 
-	this.mouseMove = function(e,x,y,obj){
+	this.mouseMove = function(e,x,y){
 		if(this.mouseDownBoolean){
 			if(this.drawX2!=x || this.drawY2!=y){
 		this.drawX2 = x;
@@ -1088,12 +997,22 @@ function fillRectangle(){
 		ctx.putImageData(imageData,0,0);
 		ctx.fillRect(this.drawX,this.drawY,this.w,this.h);
 		}
-		document.getElementById("mess").innerHTML=obj;
+		document.getElementById("mess").innerHTML="obj";
 
 	}
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1107,7 +1026,7 @@ function fillRectangleSymmetry(){
 	 this.drawX = this.drawY2 = this.drawY = this.drawX2 = null;
 	 this.drew = false;
 	 this.w = this.h =0;
-this.drawX31 = this.drawY31 =0;
+
 
 	this.mouseUp = function(e,x,y,x2,y2){
 		//if(drew){
@@ -1158,12 +1077,17 @@ this.drawX31 = this.drawY31 =0;
 		ctx.fillRect(this.drawX,this.drawY,this.w,this.h);
 		ctx.fillRect(this.drawX31,this.drawY31,this.w2,this.h2);
 		}
-		document.getElementById("mess").innerHTML=this.drawX+"f"+this.drawX31;
+		document.getElementById("mess").innerHTML="";
 
 	}
 	}
 
 }
+
+
+
+
+
 
 
 
@@ -1516,13 +1440,12 @@ this.mouseDown = function(e,x,y){
 
 function glowingPencil(){
 
-	this.strokeStyleColorStore;
-
 this.init = function(){
 	this.drawX = drawY = 0;
 	this.mouseDownBoolean = false;
 	shadowBlur = 10;
-	//this.fillStyleColorStore;
+	this.strokeStyleColorStore;
+	this.fillStyleColorStore;
 	paint();
 	document.getElementById("mess").innerHTML="moving";
 
@@ -1533,23 +1456,19 @@ this.mouseUp = function(e,x,y){
 	mouseDownBoolean = false;
 	shadowBlur = 0;
 	strokeStyleColor = this.strokeStyleColorStore;
-	//fillStyleColor = this.fillStyleColorStore;
+	fillStyleColor = this.fillStyleColorStore;
 	paint();
 	//shadowBlur = 0;
 	
-	document.getElementById("mess").innerHTML=this.strokeStyleColorStore;
+	//document.getElementById("mess").innerHTML="moving";
 }
 
 this.mouseDown = function(e,x,y){
 
 this.init();
-document.getElementById("mess").innerHTML=strokeStyleColor;
 this.strokeStyleColorStore = strokeStyleColor;
-//this.fillStyleColorStore = fillStyleColor;
-document.getElementById("mess2").innerHTML=strokeStyleColor;
-	//strokeStyleColor = fillStyleColor = "white";
-	shadowColor = strokeStyleColor;
-	/*fillStyleColor = */strokeStyleColor = "white";
+this.fillStyleColorStore = fillStyleColor;
+	strokeStyleColor = fillStyleColor = "white";
 	this.lastX = x;
 	this.lastY = y;
 	
@@ -1558,8 +1477,6 @@ document.getElementById("mess2").innerHTML=strokeStyleColor;
 	
 
 	mouseDownBoolean = true;
-
-	//paint();
 	//paint();
 }
 
@@ -1575,119 +1492,10 @@ document.getElementById("mess2").innerHTML=strokeStyleColor;
 	ctx.stroke();
 	this.lastX =this.drawX;
 this.lastY=this.drawY;
-
 	//ctx.clearRect(0,0,800,600);
 	//ctx.fillText(drawX+ " " +lineLength,100,100);
 	}
 	//paint();
-}
-
-}//end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function spray(){
-
-
-	this.drawX = this.drawY = 0;
-	this.mouseDownBoolean = false;
-	
-	this.diffX=0;
-	this.diffY=0;
-	this.r=1;
-	//document.getElementById("mess").innerHTML="moving";
-
-this.lastX =0;
-this.lastY=0;
-
-this.mouseUp = function(e,x,y){
-	mouseDownBoolean = false;
-    this.fillStyleColorStore;
-    ctx.closePath();
-	paint();
-	//shadowBlur = 0;
-	
-	//document.getElementById("mess").innerHTML="moving";
-}
-
-this.mouseDown = function(e,x,y){
-
-
-	
-ctx.beginPath();
-	mouseDownBoolean = true;
-	//paint();
-}
-
-  this.mouseMove =function (e,x,y){
-	if(mouseDownBoolean){
-
-		this.diffX = this.lastX-x;
-		this.diffY = this.lastY-y;
-
-		if(this.diffX>this.diffY){
-			this.py=y;
-			if(this.diffX<0){
-				this.px=x+Math.random()*51;
-			}
-
-			if(this.diffX>0){
-				this.px=x-Math.random()*51;
-			}
-		}
-	
-
-		if(this.diffX<this.diffY){
-			this.px=x;
-			if(this.diffY<0){
-				this.py=y+Math.random()*51;
-			}
-
-			if(this.diffY>0){
-				this.py=y-Math.random()*51;
-			}
-		}
-
-		this.r =Math.random()*10+1;
-
-		ctx.arc(this.px,this.py,this.r,0,360*Math.PI/180);
-		ctx.fill();
-
-
-	this.lastX = x;
-	this.lastY = y;
-	}
-	
 }
 
 }//end

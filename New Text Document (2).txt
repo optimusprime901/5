@@ -1,0 +1,87 @@
+window.addEventListener('load',init,false);
+
+function init(){
+
+	canvas = document.getElementById('canvas');
+	ctx = canvas.getContext('2d');
+
+	
+	mouseDownBoolean = false;
+	drawX = drawY =null;
+
+	color="black";
+
+	canvas.addEventListener('mousedown',mouseDown,false);
+	canvas.addEventListener('mousemove',mouseMove,false);
+	canvas.addEventListener('mouseup',mouseUp,false);
+	strokeStyle = document.getElementById('strokeStyle');
+	strokeStyle.addEventListener('change',strokeStyleChange,false);
+
+
+	//run();
+}
+
+
+
+
+function run(){
+
+
+	paint();
+	fps = webkitRequestAnimationFrame || mazRequestAnimationFrame || oRequestAnimationFrame || msRequestAnimationFrame;
+	fps(run);
+	//setTimeout(0.1,run);
+	
+}
+
+//
+
+//mouseEvents
+
+function mouseUp(e){
+	mouseDownBoolean = false;
+}
+
+function mouseDown(e){
+
+	drawX = e.pageX;
+	drawY = e.pageY;
+	
+	ctx.beginPath();
+	ctx.moveTo(drawX,drawY);
+	/*ctx.lineTo(drawX+1/2,drawY+1/2);
+	ctx.stroke();*/
+
+	mouseDownBoolean = true;
+	//paint();
+}
+
+function mouseMove(e){
+	if(mouseDownBoolean){
+		drawX = e.pageX;
+		drawY = e.pageY;
+
+	ctx.lineTo(drawX,drawY);
+	ctx.stroke();
+	}
+	//paint();
+}
+
+
+function paint(){
+	ctx.strokeStyle=color;
+	ctx.beginPath();
+	ctx.moveTo(drawX,drawY);
+	ctx.lineTo(drawX+10,drawY+10);
+	ctx.stroke();
+}
+
+
+
+//strokeStyleChange
+function strokeStyleChange(e){
+
+	target = e.target;
+	color = target.value;
+	paint();
+}

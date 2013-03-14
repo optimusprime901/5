@@ -1,0 +1,20 @@
+window.addEventListener('load',init,false);
+
+function init(){
+canvas = document.getElementById('canvas');
+	ctx = canvas.getContext('2d');
+var l = m =0;
+for(var i=0;i<=255,i++){
+for(var j=0;j<=255,j++){
+for(var k=0;k<=255,k++){
+ctx.fillStyle = rgb(i,j,k);
+ctx.fillLine(l,m);
+l++;
+if(l>255){
+m++;
+l=0;
+}
+}
+}
+}
+}

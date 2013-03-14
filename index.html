@@ -1,38 +1,126 @@
 <html>
 <head>
 <script src="main.js"></script>
+<script  type="text/javascript" src="jscolor.js"></script>
 </head>
 <body style="background-color:black;color:white;">
 
 <canvas id="canvas" width="800" height="600" style="background-color:white;"></canvas>
 
+<div style="float:right;">
+
 <br>
-Outline Colour:<br>
-<select id="strokeStyle" style="">
+BG Colour:<br>
+<select id="bgColorElement" style="">
+<option value="white">white</option>
 <option value="black">black</option>
 <option value="red">red</option>
 <option value="green">green</option>
 <option value="blue">blue</option>
 </select>
 
+
 <br>
-Filling Colour:<br>
-<select id="fillStyle" style="">
-<option value="black">black</option>
-<option value="red">red</option>
-<option value="green">green</option>
-<option value="blue">blue</option>
-</select>
+Colour:<br>
+<input class="color" id="color" value="000000">
+
 
 <br>
 Tool:<br>
 <select id="toolElement" style="">
 <option value="freeHand">free hand</option>
+<option value="eraser">eraser</option>
+<option value="line">line</option>
 <option value="strokeRectangle">outline rectangle</option>
 <option value="fillRectangle">fill rectangle
 </option>
+<option value="continousLines">continous lines</option>
+<option value="strokeCircle">outline circle</option>
+<option value="fillCircle">fill circle</option>
+<option value="glowingPencil">glowingPencil</option>
+<option value="spray">spray</option>
 </select>
 
+<br>
+Brush Width:<br>
+<input id="lineWidthElement" value="1">
+</input>
+
+<br>
+Brush Length:<br>
+<input id="lineLengthElement" value="0">
+</input>
+
+<br>
+Glow Size:<br>
+<input id="glowSizeElement" value="10">
+</input>
+
+<br>
+Brush Join:<br>
+<select id="brushJoinElement" >
+<option value="round">round</option>
+<option value="miter">miter</option>
+<option value="bevel">bevel</option>
+</select>
+
+<br>
+Brush Cap:<br>
+<select id="brushCapElement" >
+<option value="round">round</option>
+<option value="butt">butt</option>
+<option value="square">square</option>
+</select>
+
+<br>
+Opacity:<br>
+<input id="opacity" value="1"></input>
+
+<br>
+<button id="undoElement" >Undo
+</button>
+
+<br>
+<button id="invertElement" >invert
+</button>
+
+<br>
+<button id="greyscaleElement" >greyscale
+</button>
+
+<br>
+<button id="sketchElement" >sketch
+</button>
+
+<br>
+<button id="redoElement" >Redo
+</button>
+
+<br>
+Canvas Width:<br>
+<input id="canvasWidthElement" value="800"></input>
+<br>
+Canvas Height:<br>
+<input id="canvasHeightElement" value="600"></input>
+<br>
+<button id="setCanvasSizeElement" >Set Size
+</button>
+
+<br>
+<button id="clearElement">clear</button>
+
+<br>
+<button id="saveImageElement">Save Image</button>
+
+</div>
+
+<div id="mess">
+message
+</div>
+
+<div id="mess2">
+message
+</div>
 
 </body>
 
